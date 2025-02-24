@@ -11,7 +11,6 @@ import {
   User,
 } from 'firebase/auth';
 import { auth } from './firebase-config';
-//
 function App() {
   const [user, setUser] = useState<User | null>(null);
   const [email, setEmail] = useState('');
