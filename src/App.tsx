@@ -39,10 +39,10 @@ function App() {
     const provider = new GithubAuthProvider();
     provider.addScope('user:email'); // Ensure email access
     try {
+      console.log('Opening GitHub sign-in popup...');
       const result = await signInWithPopup(auth, provider);
       console.log('GitHub sign-in success:', result.user);
     } catch (error: unknown) {
-      // ✅ Use unknown instead of any
       if (error instanceof Error) {
         console.error('GitHub sign-in failed:', error.message);
       }
