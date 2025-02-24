@@ -7,16 +7,17 @@ import {
   signInWithPopup,
   signOut,
   onAuthStateChanged,
+  User, // Import User type from Firebase Auth
 } from 'firebase/auth';
 import { GithubAuthProvider } from 'firebase/auth';
+import { auth } from './firebase-config';
 
-import { auth } from '../firebase/firebase-config';
 function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null); // ✅ Fix
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+      setUser(currentUser); // ✅ Now TypeScript knows this is safe
     });
     return () => unsubscribe();
   }, []);
@@ -29,6 +30,7 @@ function App() {
       console.error('Login Failed:', error);
     }
   };
+
   const handleGitHub = async () => {
     const provider = new GithubAuthProvider();
     provider.addScope('user:email'); // Ensure you get the email
