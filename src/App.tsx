@@ -4,20 +4,20 @@ import viteLogo from '/vite.svg';
 import './App.css';
 import {
   GoogleAuthProvider,
+  GithubAuthProvider,
   signInWithPopup,
   signOut,
   onAuthStateChanged,
-  User, // Import User type from Firebase Auth
+  User,
 } from 'firebase/auth';
-import { GithubAuthProvider } from 'firebase/auth';
 import { auth } from './firebase-config';
 
 function App() {
-  const [user, setUser] = useState<User | null>(null); // ✅ Fix
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser); // ✅ Now TypeScript knows this is safe
+      setUser(currentUser);
     });
     return () => unsubscribe();
   }, []);
@@ -25,25 +25,34 @@ function App() {
   const handleGoogle = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
-    } catch (error) {
-      console.error('Login Failed:', error);
+      const result = await signInWithPopup(auth, provider);
+      console.log('Google sign-in success:', result.user);
+    } catch (error: unknown) {
+      // ✅ Use unknown instead of any
+      if (error instanceof Error) {
+        console.error('Google sign-in failed:', error.message);
+      }
     }
   };
 
   const handleGitHub = async () => {
     const provider = new GithubAuthProvider();
-    provider.addScope('user:email'); // Ensure you get the email
+    provider.addScope('user:email'); // Ensure email access
     try {
-      await signInWithPopup(auth, provider);
-    } catch (error) {
-      console.error('GitHub Login Failed:', error);
+      const result = await signInWithPopup(auth, provider);
+      console.log('GitHub sign-in success:', result.user);
+    } catch (error: unknown) {
+      // ✅ Use unknown instead of any
+      if (error instanceof Error) {
+        console.error('GitHub sign-in failed:', error.message);
+      }
     }
   };
 
   const handleLogout = async () => {
     try {
       await signOut(auth);
+      console.log('User logged out successfully');
     } catch (error) {
       console.error('Logout Failed:', error);
     }
