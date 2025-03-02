@@ -28,6 +28,13 @@ function App() {
   // Handle Email & Password Authentication
   const handleEmailAuth = async () => {
     setError(null);
+
+    // Check for empty fields
+    if (!email.trim() || !password.trim()) {
+      setError('Email and password fields cannot be empty.');
+      return;
+    }
+
     try {
       if (isRegistering) {
         await createUserWithEmailAndPassword(auth, email, password);
