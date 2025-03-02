@@ -29,7 +29,6 @@ function App() {
   const handleEmailAuth = async () => {
     setError(null);
 
-    // Check for empty fields
     if (!email.trim() || !password.trim()) {
       setError('Email and password fields cannot be empty.');
       return;
@@ -45,7 +44,7 @@ function App() {
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
-        setError(error.message);
+        setError(error.message || 'An error occurred during authentication.');
         console.error('Authentication failed:', error.message);
       }
     }
